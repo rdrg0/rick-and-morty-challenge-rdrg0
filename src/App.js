@@ -5,29 +5,26 @@ import './App.css';
 
 
 
-
-
+function countCharsInName(char, resources) {
+  return resources.reduce((acc, resource) => (acc + resource.name.toLowerCase().split(char).length - 1), 0)
+}
 
 
 function App() {
-  const [results, setResults] = useState(null)
+  const [results, setResults] = useState()
 
   function runProgram() {
 
     const t0 = performance.now() //Starting timestamp
-    // getAllData(RESOURCES.characters)
-    //   .then(res => {
-    //     console.log(res)
-    //     const t1 = performance.now()
-    //     console.log(t1 - t0)
-    //     setResults(JSON.stringify(res, null, 2))
 
-    //   })
     Promise.all([getAllData(RESOURCES.characters), getAllData(RESOURCES.locations), getAllData(RESOURCES.episodes)])
       .then(([characters, locations, episodes]) => {
-        console.log(characters)
-        console.log(episodes)
-        console.log(locations)
+        console.log(characters, countCharsInName('c', characters))
+        console.log(episodes, countCharsInName('e', episodes))
+        console.log(locations, countCharsInName('l', locations))
+
+
+
         //setResults(JSON.stringify(values, null, 2))
         const t1 = performance.now()
         console.log(t1 - t0)
