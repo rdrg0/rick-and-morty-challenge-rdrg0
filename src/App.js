@@ -9,25 +9,48 @@ function countCharsInName(char, resources) {
   return resources.reduce((acc, resource) => (acc + resource.name.toLowerCase().split(char).length - 1), 0)
 }
 
+function countChars(characters, locations, episodes) {
+  return [
+    {
+      "char": "l",
+      "count": countCharsInName('l', locations),
+      "resource": "location"
+    },
+    {
+      "char": "e",
+      "count": countCharsInName('e', episodes),
+      "resource": "episode"
+    },
+    {
+      "char": "c",
+      "count": countCharsInName('c', characters),
+      "resource": "character"
+    }
+  ]
+
+}
+
 
 function App() {
-  const [results, setResults] = useState()
+  const [results, setResults] = useState(null)
 
   function runProgram() {
-
-    const t0 = performance.now() //Starting timestamp
-
+    const t0 = performance.now()
     Promise.all([getAllData(RESOURCES.characters), getAllData(RESOURCES.locations), getAllData(RESOURCES.episodes)])
       .then(([characters, locations, episodes]) => {
-        console.log(characters, countCharsInName('c', characters))
-        console.log(episodes, countCharsInName('e', episodes))
-        console.log(locations, countCharsInName('l', locations))
 
+        const charCounterResults = countChars(characters, locations, episodes)
+        const t1 = performance.now();
+        const charCounterTime = t1 - t0
+        const charCounterOutput = {
+          exercise_name: "Char counter",
+          time: charCounterTime,
+          in_time: (time => time < 3000)(charCounterTime),
+          results: charCounterResults
+        }
 
-
-        //setResults(JSON.stringify(values, null, 2))
-        const t1 = performance.now()
-        console.log(t1 - t0)
+        ///onst episodeLocationsResults = location
+        setResults(JSON.stringify(charCounterOutput, null, 2))
       })
   }
   return (
