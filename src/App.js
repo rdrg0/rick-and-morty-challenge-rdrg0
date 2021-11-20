@@ -29,6 +29,15 @@ function countChars(characters, locations, episodes) {
   ]
 
 }
+function getCharactersLocationFromEpisodes(characters, locations, episodes) {
+  return episodes.map(episode => {
+    return {
+      name: episode.name,
+      episode: episode.episode,
+      locations: episode.characters
+    }
+  })
+}
 
 
 function App() {
@@ -41,16 +50,15 @@ function App() {
 
         const charCounterResults = countChars(characters, locations, episodes)
         const t1 = performance.now();
-        const charCounterTime = t1 - t0
         const charCounterOutput = {
           exercise_name: "Char counter",
-          time: charCounterTime,
-          in_time: (time => time < 3000)(charCounterTime),
+          time: t1 - t0,
+          in_time: (time => time < 3000)(t1 - t0),
           results: charCounterResults
         }
 
-        ///onst episodeLocationsResults = location
-        setResults(JSON.stringify(charCounterOutput, null, 2))
+        const episodeLocationsResults = getCharactersLocationFromEpisodes(characters, locations, episodes)
+        setResults(JSON.stringify([charCounterOutput, episodeLocationsResults], null, 2))
       })
   }
   return (
