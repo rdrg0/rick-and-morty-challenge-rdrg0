@@ -1,62 +1,8 @@
+import React from 'react';
 import { useState } from 'react';
 import getAllData from 'services/getAllData';
 import RESOURCES from 'services/resources';
-import './App.css';
-
-
-
-function countCharsInName(char, resources) {
-  return resources.reduce((acc, resource) => (acc + resource.name.toLowerCase().split(char).length - 1), 0)
-}
-
-function charCounter(characters, locations, episodes) {
-  return [
-    {
-      char: "l",
-      count: countCharsInName('l', locations),
-      resource: "location"
-    },
-    {
-      char: "e",
-      count: countCharsInName('e', episodes),
-      resource: "episode"
-    },
-    {
-      char: "c",
-      count: countCharsInName('c', characters),
-      resource: "character"
-    }
-  ]
-
-}
-function getLocations(episodeCharacters, characters) {
-  const charactersLocations = episodeCharacters.map(episodeCharacter => {
-    const character = characters.find(character => character.url === episodeCharacter)
-    console.log(character)
-    return character.origin.name
-  })
-  // @ts-ignore
-  return [...new Set(charactersLocations)]
-}
-function getCharactersLocationFromEpisodes(characters, episodes) {
-  return episodes.map(episode => {
-    const locations = getLocations(episode.characters, characters)
-    return {
-      name: episode.name,
-      episode: episode.episode,
-      count: locations.length,
-      locations: locations
-    }
-  })
-}
-function msFormatter(time) {
-  const ms = time % 1000;
-  const secs = (time - ms) / 1000;
-  return (`${secs}s${ms}ms`)
-}
-function inTime(time) {
-  return time < 3000
-}
+import { charCounter, msFormatter, inTime, getCharactersLocationFromEpisodes } from 'utils/utils';
 
 
 function App() {
@@ -66,7 +12,7 @@ function App() {
     const t0 = performance.now()
     Promise.all([getAllData(RESOURCES.characters), getAllData(RESOURCES.locations), getAllData(RESOURCES.episodes)])
       .then(([characters, locations, episodes]) => {
-
+        console.log(characters, locations, episodes)
         const charCounterResults = charCounter(characters, locations, episodes)
         const t1 = performance.now();
         const charCounterOutput = {

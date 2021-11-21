@@ -1,13 +1,15 @@
+import { range } from "utils/utils"
+
 function getAllData(url) {
   const response = fetch(url)
     .then(response => {
       if (response.ok) {
         return response.json()
           .then(data => {
-            if (data.info.next) {
-              return getAllData(data.info.next).then(next => [...data.results, ...next])
+            if (data.info) {
+              return getAllData(url + range(data.info.count, 1).join(','))
             } else {
-              return data.results
+              return data
             }
           })
       } else {
@@ -20,3 +22,6 @@ function getAllData(url) {
 }
 
 export default getAllData;
+
+
+
