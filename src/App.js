@@ -9,34 +9,53 @@ function countCharsInName(char, resources) {
   return resources.reduce((acc, resource) => (acc + resource.name.toLowerCase().split(char).length - 1), 0)
 }
 
-function countChars(characters, locations, episodes) {
+function charCounter(characters, locations, episodes) {
   return [
     {
-      "char": "l",
-      "count": countCharsInName('l', locations),
-      "resource": "location"
+      char: "l",
+      count: countCharsInName('l', locations),
+      resource: "location"
     },
     {
-      "char": "e",
-      "count": countCharsInName('e', episodes),
-      "resource": "episode"
+      char: "e",
+      count: countCharsInName('e', episodes),
+      resource: "episode"
     },
     {
-      "char": "c",
-      "count": countCharsInName('c', characters),
-      "resource": "character"
+      char: "c",
+      count: countCharsInName('c', characters),
+      resource: "character"
     }
   ]
 
 }
-function getCharactersLocationFromEpisodes(characters, locations, episodes) {
+function getLocations(episodeCharacters, characters) {
+  const charactersLocations = episodeCharacters.map(episodeCharacter => {
+    const character = characters.find(character => character.url === episodeCharacter)
+    console.log(character)
+    return character.origin.name
+  })
+  // @ts-ignore
+  return [...new Set(charactersLocations)]
+}
+function getCharactersLocationFromEpisodes(characters, episodes) {
   return episodes.map(episode => {
+    const locations = getLocations(episode.characters, characters)
     return {
       name: episode.name,
       episode: episode.episode,
-      locations: episode.characters
+      count: locations.length,
+      locations: locations
     }
   })
+}
+function msFormatter(time) {
+  const ms = time % 1000;
+  const secs = (time - ms) / 1000;
+  return (`${secs}s${ms}ms`)
+}
+function inTime(time) {
+  return time < 3000
 }
 
 
@@ -48,17 +67,24 @@ function App() {
     Promise.all([getAllData(RESOURCES.characters), getAllData(RESOURCES.locations), getAllData(RESOURCES.episodes)])
       .then(([characters, locations, episodes]) => {
 
-        const charCounterResults = countChars(characters, locations, episodes)
+        const charCounterResults = charCounter(characters, locations, episodes)
         const t1 = performance.now();
         const charCounterOutput = {
           exercise_name: "Char counter",
-          time: t1 - t0,
-          in_time: (time => time < 3000)(t1 - t0),
+          time: msFormatter(t1 - t0),
+          in_time: inTime(t1 - t0),
           results: charCounterResults
         }
 
-        const episodeLocationsResults = getCharactersLocationFromEpisodes(characters, locations, episodes)
-        setResults(JSON.stringify([charCounterOutput, episodeLocationsResults], null, 2))
+        const episodeLocationsResults = getCharactersLocationFromEpisodes(characters, episodes)
+        const t2 = performance.now();
+        const episodeLocationsOutput = {
+          exercise_name: "Episode locations",
+          time: msFormatter(t2 - t1),
+          in_time: inTime(t2 - t1),
+          results: episodeLocationsResults
+        }
+        setResults(JSON.stringify([charCounterOutput, episodeLocationsOutput], null, 4))
       })
   }
   return (
