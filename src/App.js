@@ -7,8 +7,10 @@ import { charCounter, msFormatter, inTime, getCharactersLocationFromEpisodes } f
 
 function App() {
   const [results, setResults] = useState(null)
+  const [error, setError] = useState(false)
 
   function runProgram() {
+    setError(false)
     const t0 = performance.now()
     Promise.all([getAllData(RESOURCES.characters), getAllData(RESOURCES.locations), getAllData(RESOURCES.episodes)])
       .then(([characters, locations, episodes]) => {
@@ -31,11 +33,13 @@ function App() {
         }
         setResults(JSON.stringify([charCounterOutput, episodeLocationsOutput], null, 4))
       })
+      .catch(error => setError(error.message))
   }
   return (
     <div>
       <h1>Rick and Morty Challenge</h1>
       <button onClick={runProgram}>Run</button>
+      {error && <span>Failed to retrieve data</span>}
       {results && <pre>{results}</pre>}
     </div>
   );

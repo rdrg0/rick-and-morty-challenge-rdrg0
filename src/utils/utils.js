@@ -1,5 +1,4 @@
 function countCharsInName(char, resources) {
-  console.log(resources)
   return resources.reduce((acc, resource) => (acc + resource.name.toLowerCase().split(char).length - 1), 0)
 }
 
@@ -55,3 +54,5 @@ export function range(endAt, startAt) {
   // @ts-ignore
   return [...Array(endAt - startAt + 1).keys()].map(i => i + startAt);
 }
+
+export const exportedForTesting = { countCharsInName }

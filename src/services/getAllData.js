@@ -16,7 +16,7 @@ function getAllData(url) {
         console.log('not ok')
       }
     })
-    .catch(error => console.log(error))
+
   return response
 
 }
