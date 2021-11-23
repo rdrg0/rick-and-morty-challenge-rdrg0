@@ -7,7 +7,7 @@ function getAllData(url) {
         return response.json()
           .then(data => {
             if (data.info) {
-              return getAllData(url + range(data.info.count, 1).join(','))
+              return getAllData(url + range(data.info.count, 1).join(',')).then(data => data)
             } else {
               return data
             }

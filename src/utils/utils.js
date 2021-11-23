@@ -26,7 +26,6 @@ export function charCounter(characters, locations, episodes) {
 function getLocations(episodeCharacters, characters) {
   const charactersLocations = episodeCharacters.map(episodeCharacter => {
     const character = characters.find(character => character.url === episodeCharacter)
-    console.log(character)
     return character.origin.name
   })
   // @ts-ignore

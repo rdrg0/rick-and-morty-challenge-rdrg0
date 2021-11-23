@@ -12,7 +12,6 @@ function App() {
     const t0 = performance.now()
     Promise.all([getAllData(RESOURCES.characters), getAllData(RESOURCES.locations), getAllData(RESOURCES.episodes)])
       .then(([characters, locations, episodes]) => {
-        console.log(characters, locations, episodes)
         const charCounterResults = charCounter(characters, locations, episodes)
         const t1 = performance.now();
         const charCounterOutput = {
