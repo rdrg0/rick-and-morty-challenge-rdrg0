@@ -1,4 +1,5 @@
 import { charCounter, exportedForTesting, inTime, msFormatter, range } from "utils/utils";
+const { countCharsInName, getLocations } = exportedForTesting
 
 
 test('time (in ms) to be formatted as seconds and milliseconds', () => {
@@ -23,7 +24,15 @@ test('charCounter to output results', () => {
 
 test('countCharsInName to count chars in objects name property', () => {
   const characters = [{ name: "Rick Sanchez" }, { name: "Morty Smith" }, { name: "Summer Smith" }]
-  const { countCharsInName } = exportedForTesting
   expect(countCharsInName('c', characters)).toBe(2)
   expect(countCharsInName('s', characters)).toBe(4)
+});
+test("getLocation to get location(origin) from episode's characters url", () => {
+  const charactersUrl = ['rickUrl', 'mortyUrl']
+  const characters = [
+    { url: "rickUrl", origin: { name: "Earth-C137" } },
+    { url: "mortyUrl", origin: { name: "Earth-C137" } },
+    { url: "other", origin: { name: "not earth" } }
+  ];
+  expect(getLocations(charactersUrl, characters)).toStrictEqual(["Earth-C137"])
 });

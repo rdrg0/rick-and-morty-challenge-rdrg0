@@ -55,4 +55,4 @@ export function range(endAt, startAt) {
   return [...Array(endAt - startAt + 1).keys()].map(i => i + startAt);
 }
 
-export const exportedForTesting = { countCharsInName }
+export const exportedForTesting = { countCharsInName, getLocations }
